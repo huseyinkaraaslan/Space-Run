@@ -6,7 +6,6 @@ public class PlayerControl : MonoBehaviour
 {
     private int runSpeed, walkSpeed;
     public Transform camera;
-    public GameObject startScreen, finishScreen;
     public Animator anim;
     Vector3 firstPos, endPos, tempPos;
     Vector3 distance;
@@ -14,11 +13,10 @@ public class PlayerControl : MonoBehaviour
 
     void Start()
     {
-        runSpeed = 8; walkSpeed = 4;
+        runSpeed = 6; walkSpeed = 2;
         distance = new Vector3(-2.2f, 2.7f, 0);
         anim = this.GetComponent<Animator>();
-        startScreen.SetActive(true);
-        finishScreen.SetActive(false);
+        camera.transform.position = this.transform.position + distance;
     }
 
     void Update()
@@ -53,7 +51,7 @@ public class PlayerControl : MonoBehaviour
             }
 
             tempPos = (endPos - firstPos).normalized;
-            transform.Translate((tempPos.x) / 40, 0, 0);
+            transform.Translate((tempPos.x) / 25, 0, 0);
         }
 
         camera.transform.position = Vector3.Lerp(camera.transform.position, this.transform.position + distance, 3f);
@@ -66,6 +64,7 @@ public class PlayerControl : MonoBehaviour
             anim.SetBool("Run", false);
             anim.SetBool("Walk", true);
             anim.SetBool("End", false);
+            anim.SetBool("Die", false);
         }
 
         if (other.tag == "End")
@@ -73,8 +72,22 @@ public class PlayerControl : MonoBehaviour
             anim.SetBool("Run", false);
             anim.SetBool("Walk", false);
             anim.SetBool("End", true);
+            anim.SetBool("Die", false);
 
-            finishScreen.SetActive(true);
+            GetComponent<MenuControl>().finishScreen.SetActive(true);
+        }
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.transform.parent.tag == "Obstacle")
+        {
+            anim.SetBool("Walk", false);
+            anim.SetBool("Run", false);
+            anim.SetBool("Die", true);
+
+            camera.transform.position = this.transform.position + distance + new Vector3(-2,0,0);
+            GetComponent<MenuControl>().dieScreen.SetActive(true);
         }
     }
 }
