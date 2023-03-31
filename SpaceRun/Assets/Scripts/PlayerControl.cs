@@ -17,6 +17,10 @@ public class PlayerControl : MonoBehaviour
         distance = new Vector3(-2.2f, 2.7f, 0);
         anim = this.GetComponent<Animator>();
         camera.transform.position = this.transform.position + distance;
+
+        GetComponent<MenuControl>().startScreen.SetActive(true);
+        GetComponent<MenuControl>().dieScreen.SetActive(false);
+        GetComponent<MenuControl>().finishScreen.SetActive(false);
     }
 
     void Update()

@@ -5,13 +5,46 @@ using UnityEngine.SceneManagement;
 
 public class MenuControl : MonoBehaviour
 {
-    public GameObject startScreen, finishScreen, dieScreen;
+    public GameObject startScreen, finishScreen, dieScreen, levelScreen, menuScreen;
 
     private void Start()
     {
-        startScreen.SetActive(true);
-        dieScreen.SetActive(false);
-        finishScreen.SetActive(false);
+        menuScreen.SetActive(true);
+        levelScreen.SetActive(false);
+    }
+
+    public void startButton()
+    {
+        SceneManager.LoadScene("Level1");
+    }
+
+    public void levelButton()
+    {
+        levelScreen.SetActive(true);
+        menuScreen.SetActive(false);
+    }
+
+    public void level1Button()
+    {
+        SceneManager.LoadScene("Level1");
+    }
+
+    public void level2Button()
+    {
+        SceneManager.LoadScene("Level2");
+    }
+
+    public void menuButton()
+    {
+        if(SceneManager.GetActiveScene().buildIndex == 0){
+            levelScreen.SetActive(false);
+            menuScreen.SetActive(true);
+        }
+        else
+        {
+            SceneManager.LoadScene("Menu");
+        }
+        
     }
 
     public void playButton()
@@ -31,5 +64,10 @@ public class MenuControl : MonoBehaviour
     public void nextLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+    }
+
+    public void quitButton()
+    {
+        Application.Quit();
     }
 }
